@@ -1,0 +1,19 @@
+{
+  "name": "zk/mp-wechat",
+  "description": "Get Wechat User Info",
+  "type": "library",
+  "authors": [
+    {
+      "name": "zk",
+      "email": "dlzk@qq.com"
+    }
+  ],
+  "minimum-stability": "dev",
+  "require": {
+  },
+  "autoload": {
+    "psr-4": {
+      "wechat": "src/"
+    }
+  }
+}
