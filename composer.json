@@ -1,20 +1,13 @@
 {
-  "name": "ZEKI/mp-wechat",
-  "description": "Get Wechat User Info",
-  "type": "library",
-  "authors": [
-    {
-      "name": "ZEKI",
-      "email": "dlzk@qq.com"
-    }
-  ],
-  "minimum-stability": "dev",
-  "require": {
-
-  },
-  "autoload": {
-    "psr-4": {
-      "Wechat": "src/"
-    }
-  }
+    "name": "sfsoft/mp-wechat",
+    "description": "wechat helper",
+    "type": "library",
+    "authors": [
+        {
+            "name": "ZEKI",
+            "email": "dlzk@qq.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
 }
