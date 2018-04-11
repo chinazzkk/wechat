@@ -1,5 +1,5 @@
 {
-  "name": "sfsoft/mp-wechat",
+  "name": "chinazzkk/mp-wechat",
   "description": "Get Wechat User Info",
   "type": "library",
   "authors": [
@@ -13,7 +13,7 @@
   },
   "autoload": {
     "psr-4": {
-      "sfsoft\\wechat": "src/"
+      "wechat": "src/"
     }
   }
 }
