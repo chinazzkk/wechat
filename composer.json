@@ -1,5 +1,5 @@
 {
-  "name": "chinazzkk/mp-wechat",
+  "name": "ZEKI/mp-wechat",
   "description": "Get Wechat User Info",
   "type": "library",
   "authors": [
@@ -10,10 +10,11 @@
   ],
   "minimum-stability": "dev",
   "require": {
+
   },
   "autoload": {
     "psr-4": {
-      "wechat": "src/"
+      "Wechat": "src/"
     }
   }
 }
