@@ -1,5 +1,5 @@
 {
-  "name": "zk/mp-wechat",
+  "name": "sfsoft/mp-wechat",
   "description": "Get Wechat User Info",
   "type": "library",
   "authors": [
