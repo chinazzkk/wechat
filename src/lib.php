@@ -2,7 +2,7 @@
 
 namespace sfsoft\wechat;
 
-class SFLib
+class lib
 {
     /**
      *

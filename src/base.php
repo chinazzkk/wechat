@@ -2,7 +2,7 @@
 
 namespace sfsoft\wechat;
 
-class SFBase
+class base
 {
     public $data = null;
     public $open_id = '';
