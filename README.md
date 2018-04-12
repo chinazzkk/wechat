@@ -5,10 +5,10 @@
 
 #### 获取 OPEN_ID
     //获取 OPEN_ID
-    $wechat = new \sfsoft\wechat\SFBase('app_id', 'app_secret');
+    $wechat = new \sfsoft\wechat\base('app_id', 'app_secret');
     $detail = $wechat->getOpenID();
 
 #### 获取 JS 签名包
-    $wechat = new \sfsoft\wechat\SFJs('app_id', 'app_secret');
+    $wechat = new \sfsoft\wechat\jsapi('app_id', 'app_secret');
     $detail = $wechat->getSignPackage('http://www.example.com');
 
