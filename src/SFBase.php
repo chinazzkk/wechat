@@ -1,8 +1,8 @@
 <?php
 
-namespace SFWechat;
+namespace sfsoft\wechat;
 
-class WechatBase
+class SFBase
 {
     public $data = null;
     public $open_id = '';

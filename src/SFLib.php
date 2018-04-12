@@ -1,8 +1,8 @@
 <?php
 
-namespace SFWechat;
+namespace sfsoft\wechat;
 
-class WechatLib
+class SFLib
 {
     /**
      *

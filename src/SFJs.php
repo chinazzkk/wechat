@@ -1,11 +1,11 @@
 <?php
 
-namespace SFWechat;
+namespace sfsoft\wechat;
 
 define("ACCESS_TOKEN_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'access_token.php');
 define("JSAPI_TICKET_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'jsapi_ticket.php');
 
-class WechatJs
+class SFJs
 {
     private $appid = '';
     private $secret = '';
@@ -24,7 +24,7 @@ class WechatJs
     public function getToken()
     {
         $expireTime = 0;
-        $tokenFile = WechatLib::getJsonFile(ACCESS_TOKEN_DIR);
+        $tokenFile = SFLib::getJsonFile(ACCESS_TOKEN_DIR);
         if ($tokenFile) {
             $tokenFile = json_decode($tokenFile);
         } else {
@@ -38,7 +38,7 @@ class WechatJs
         }
 
         $tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$this->appid&secret=$this->secret";
-        $result = WechatLib::sendRequest($tokenUrl);
+        $result = SFLib::sendRequest($tokenUrl);
         if (is_array($result) && isset($result['errcode'])) {
             return false;
         }
@@ -46,7 +46,7 @@ class WechatJs
             $expireTime = time() + (int)$result['expires_in'];
             $token = $result['access_token'];
             $result['expire_time'] = $expireTime;
-            WechatLib::setJsonFile(ACCESS_TOKEN_DIR, json_encode($result));
+            SFLib::setJsonFile(ACCESS_TOKEN_DIR, json_encode($result));
             return $token;
         }
         return false;
@@ -82,12 +82,12 @@ class WechatJs
 
     public function writeTest()
     {
-        WechatLib::setJsonFile(JSAPI_TICKET_DIR,'1111');
+        SFLib::setJsonFile(JSAPI_TICKET_DIR,'1111');
     }
 
     private function getJsApiTicket()
     {
-        $tickFile = WechatLib::getJsonFile(JSAPI_TICKET_DIR);
+        $tickFile = SFLib::getJsonFile(JSAPI_TICKET_DIR);
 
         if ($tickFile)
             $data = json_decode($tickFile);
@@ -103,13 +103,13 @@ class WechatJs
         // 如果是企业号用以下 URL 获取 ticket
         // $url = "https://qyapi.weixin.qq.com/cgi-bin/get_jsapi_ticket?access_token=$accessToken";
         $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
-        $result = WechatLib::sendRequest($url);
+        $result = SFLib::sendRequest($url);
         if (is_array($result) && isset($result['ticket'])) {
             $res = [
                 'jsapi_ticket' => $result['ticket'],
                 'expire_time' => time() + (int)$result['expires_in']
             ];
-            WechatLib::setJsonFile(JSAPI_TICKET_DIR, json_encode($res));
+            SFLib::setJsonFile(JSAPI_TICKET_DIR, json_encode($res));
             return $result['ticket'];
         } else {
             return false;
