@@ -1,6 +1,6 @@
 <?php
 
-namespace sfsoft\wechat;
+namespace wechat;
 
 class Base
 {

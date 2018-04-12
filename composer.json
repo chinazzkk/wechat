@@ -1,5 +1,5 @@
 {
-    "name": "sfsoft/mp-wechat",
+    "name": "sfsoft/sfs-wechat",
     "description": "wechat helper",
     "type": "library",
     "authors": [
@@ -8,6 +8,10 @@
             "email": "dlzk@qq.com"
         }
     ],
-    "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php": ">=5.6"
+    },
+    "autoload": {
+        "psr-0": { "SFSWechat": "src/" }
+    }
 }
