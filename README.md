@@ -1,3 +1,7 @@
+
+#### composer 安装
+    composer require sfsoft/wechat
+
 # wechat helper
     这是一个微信公众平台基础功能Lib库。
     用于微信公众号获取JS授权以及 open_id 获取。
