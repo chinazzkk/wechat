@@ -80,10 +80,6 @@ class jsapi
         return $signPackage;
     }
 
-    public function writeTest()
-    {
-        lib::setJsonFile(JSAPI_TICKET_DIR,'1111');
-    }
 
     private function getJsApiTicket()
     {
@@ -105,10 +101,10 @@ class jsapi
         $url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=$accessToken";
         $result = lib::sendRequest($url);
         if (is_array($result) && isset($result['ticket'])) {
-            $res = [
+            $res = array(
                 'jsapi_ticket' => $result['ticket'],
                 'expire_time' => time() + (int)$result['expires_in']
-            ];
+            );
             lib::setJsonFile(JSAPI_TICKET_DIR, json_encode($res));
             return $result['ticket'];
         } else {

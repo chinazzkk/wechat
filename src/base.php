@@ -2,9 +2,14 @@
 
 namespace sfsoft\wechat;
 
+define('DB_NAME', 't_wechat_user');
+
+use Illuminate\Database\Capsule\Manager as DB;
+
 class base
 {
     public $data = null;
+    public $dataBaseConfig = false;
     public $open_id = '';
     public $checkState = false;
     private $appid = '';
@@ -42,7 +47,6 @@ class base
         }
     }
 
-
     //获取用户完整信息
     public function getUserDetail($baseUrl = null)
     {
@@ -58,11 +62,11 @@ class base
                 if ($scope === 'snsapi_userinfo') {
                     return $this->getUserInfo($data['access_token'], $data['openid']);
                 } else {
-                    return ['code' => -100, 'msg' => 'scope type error'];
+                    return array('code' => -100, 'msg' => 'scope type error');
                 }
             }
         } else {
-            return ['code' => -100, 'msg' => 'request data error'];
+            return array('code' => -100, 'msg' => 'request data error');
         }
     }
 
@@ -144,14 +148,58 @@ class base
     }
 
     /**
+     * UnionID用户资料信息
+     */
+
+    public function getUnionIdInfo($open_id, $ln = 'zh_CN')
+    {
+        $accessToken = lib::getAccessToken($this->appid, $this->secret);
+        $baseUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=$accessToken&openid=$open_id&lang=$ln";
+        $result = $this->_sendRequest($baseUrl);
+        return $result ? $result : false;
+    }
+
+
+    /**
      * 获取用户资料信息
      */
 
     public function getUserInfo($token, $open_id, $ln = 'zh_CN')
     {
+
         if ($this->checkToken($token, $open_id)) {
             $baseUrl = "https://api.weixin.qq.com/sns/userinfo?access_token=$token&openid=$open_id&lang=$ln";
             $result = $this->_sendRequest($baseUrl);
+
+            if ($this->dataBaseConfig) {
+                lib::initDataBase($this->dataBaseConfig);
+                $detail = DB::table(DB_NAME)->where('f_openid', '=', $open_id)->count();
+                $updateData = array(
+                    'f_openid' => $open_id,
+                    'f_token' => $token,
+                    'f_nickname' => @$result['nickname'],
+                    'f_sex' => @$result['sex'],
+                    'f_city' => @$result['city'],
+                    'f_province' => @$result['province'],
+                    'f_country' => @$result['country'],
+                    'f_headimgurl' => @$result['headimgurl'],
+                    'f_unionid' => @$result['unionid'],
+                    'f_json' => json_encode($result),
+                    'f_token_expire' => time() + 7200
+                );
+                if ($detail > 0) {
+                    unset($updateData['f_openid']);
+                    $updateData['f_update'] = date('Y-m-d H:i:s');
+                    DB::table(DB_NAME)->where('f_openid', $open_id)->update($updateData);
+                } else {
+                    $updateData['f_create'] = date('Y-m-d H:i:s');
+                    $updateData['f_create'] = date('Y-m-d H:i:s');
+                    DB::table(DB_NAME)->insertGetId(
+                        $updateData
+                    );
+                }
+            }
+
             return $result ? $result : false;
         } else {
             return false;

@@ -1,9 +1,91 @@
 <?php
 
 namespace sfsoft\wechat;
+use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Database\Schema\Blueprint;
+define("ACCESS_TOKEN_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'access_token.php');
+define("JSAPI_TICKET_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'jsapi_ticket.php');
+
 
 class lib
 {
+
+    public static function initDataBase($database)
+    {
+        try {
+            $capsule = new DB;
+            // 创建链接
+            $capsule->addConnection($database);
+            // 设置全局静态可访问
+            $capsule->setAsGlobal();
+            // 启动Eloquent
+            $capsule->bootEloquent();
+
+            $isExists = DB::schema()->hasTable(DB_NAME);
+            if ($isExists === false) {
+                DB::schema()->create(DB_NAME, function (Blueprint $table) {
+                    $table->increments('f_id');
+                    $table->string('f_openid');
+                    $table->string('f_token');
+                    $table->string('f_token_expire');
+                    $table->string('f_nickname');
+                    $table->string('f_sex');
+                    $table->string('f_country');
+                    $table->string('f_province');
+                    $table->string('f_city');
+                    $table->string('f_headimgurl');
+                    $table->string('f_unionid');
+                    $table->text('f_json');
+                    $table->dateTime('f_create');
+                    $table->dateTime('f_update');
+                });
+            }
+
+            return $capsule;
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
+
+    }
+
+    /**
+     *
+     * 获取基础token
+     *
+     */
+
+    public static function getAccessToken($appid, $secret)
+    {
+        $expireTime = 0;
+        $tokenFile = self::getJsonFile(ACCESS_TOKEN_DIR);
+        if ($tokenFile) {
+            $tokenFile = json_decode($tokenFile);
+        } else {
+            return false;
+        }
+        if ($tokenFile) {
+            $expireTime = $tokenFile->expire_time;
+        }
+        if (($expireTime > time()) && isset($tokenFile->access_token)) {
+            return $tokenFile->access_token;
+        }
+
+        $tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=$appid&secret=$secret";
+        $result = lib::sendRequest($tokenUrl);
+        if (is_array($result) && isset($result['errcode'])) {
+            return false;
+        }
+        if (is_array($result) && !isset($result['errcode'])) {
+            $expireTime = time() + (int)$result['expires_in'];
+            $token = $result['access_token'];
+            $result['expire_time'] = $expireTime;
+            self::setJsonFile(ACCESS_TOKEN_DIR, json_encode($result));
+            return $token;
+        }
+        return false;
+    }
+
     /**
      *
      * 网络请求
