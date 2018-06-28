@@ -193,7 +193,7 @@ class base
                     DB::table(DB_NAME)->where('f_openid', $open_id)->update($updateData);
                 } else {
                     $updateData['f_create'] = date('Y-m-d H:i:s');
-                    $updateData['f_create'] = date('Y-m-d H:i:s');
+                    $updateData['f_update'] = date('Y-m-d H:i:s');
                     DB::table(DB_NAME)->insertGetId(
                         $updateData
                     );

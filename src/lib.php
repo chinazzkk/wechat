@@ -34,10 +34,10 @@ class lib
                     $table->string('f_province');
                     $table->string('f_city');
                     $table->string('f_headimgurl');
-                    $table->string('f_unionid');
+                    $table->string('f_unionid')->nullable();
                     $table->text('f_json');
                     $table->dateTime('f_create');
-                    $table->dateTime('f_update');
+                    $table->dateTime('f_update')->nullable();
                 });
             }
 
