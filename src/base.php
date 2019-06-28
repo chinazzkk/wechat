@@ -172,7 +172,7 @@ class base
             $result = $this->_sendRequest($baseUrl);
 
             if ($this->dataBaseConfig) {
-                lib::initDataBase($this->dataBaseConfig);
+                lib::initDataBase($this->dataBaseConfig, $this->db_name);
                 $detail = DB::table($this->db_name)->where('f_openid', '=', $open_id)->count();
                 $updateData = array(
                     'f_openid' => $open_id,

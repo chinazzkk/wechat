@@ -8,7 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 
 class lib
 {
-    public static function initDataBase($database)
+    public static function initDataBase($database, $table_name)
     {
         try {
             $capsule = new DB;
@@ -19,9 +19,9 @@ class lib
             // 启动Eloquent
             $capsule->bootEloquent();
 
-            $isExists = DB::schema()->hasTable(DB_NAME);
+            $isExists = DB::schema()->hasTable($table_name);
             if ($isExists === false) {
-                DB::schema()->create(DB_NAME, function (Blueprint $table) {
+                DB::schema()->create($table_name, function (Blueprint $table) {
                     $table->increments('f_id');
                     $table->string('f_openid');
                     $table->string('f_token');
@@ -56,7 +56,7 @@ class lib
     public static function getAccessToken($appid, $secret, $dir)
     {
         if (!$dir) {
-            $dir = __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'access_token.php';
+            $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'token' . DIRECTORY_SEPARATOR . 'access_token.php';
         }
         $expireTime = 0;
         $tokenFile = self::getJsonFile($dir);
@@ -81,7 +81,7 @@ class lib
             $expireTime = time() + (int)$result['expires_in'];
             $token = $result['access_token'];
             $result['expire_time'] = $expireTime;
-            self::setJsonFile(ACCESS_TOKEN_DIR, json_encode($result));
+            self::setJsonFile($dir, json_encode($result));
             return $token;
         }
         return false;
