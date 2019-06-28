@@ -11,7 +11,8 @@ $detail = $wechat->getUserDetail();
 
 //获取用户详细信息并存储到数据库
 $wechat = new \sfsoft\wechat\base('app_id', 'app_secret');
-$wechat->dataBaseConfig =  array(
+$wechat->db_name = 't_wechat_user_log';
+$wechat->dataBaseConfig = array(
     'driver' => 'mysql',
     'host' => 'localhost',
     'port' => '3306',
@@ -23,7 +24,6 @@ $wechat->dataBaseConfig =  array(
     'prefix' => '',
 );
 $detail = $wechat->getUserDetail();
-
 
 //获取 JS 签名包
 $wechat = new \sfsoft\wechat\jsapi('app_id', 'app_secret');

@@ -14,9 +14,11 @@ class base
     private $appid = '';
     private $secret = '';
     private $code = '';
+    public $db_name = 't_wechat_user';
 
     public function __construct($app_id, $secret)
     {
+
         if (($app_id && $secret) === true) {
             $this->appid = $app_id;
             $this->secret = $secret;
@@ -171,7 +173,7 @@ class base
 
             if ($this->dataBaseConfig) {
                 lib::initDataBase($this->dataBaseConfig);
-                $detail = DB::table(DB_NAME)->where('f_openid', '=', $open_id)->count();
+                $detail = DB::table($this->db_name)->where('f_openid', '=', $open_id)->count();
                 $updateData = array(
                     'f_openid' => $open_id,
                     'f_token' => $token,
@@ -188,11 +190,11 @@ class base
                 if ($detail > 0) {
                     unset($updateData['f_openid']);
                     $updateData['f_update'] = date('Y-m-d H:i:s');
-                    DB::table(DB_NAME)->where('f_openid', $open_id)->update($updateData);
+                    DB::table($this->db_name)->where('f_openid', $open_id)->update($updateData);
                 } else {
                     $updateData['f_create'] = date('Y-m-d H:i:s');
                     $updateData['f_update'] = date('Y-m-d H:i:s');
-                    DB::table(DB_NAME)->insertGetId(
+                    DB::table($this->db_name)->insertGetId(
                         $updateData
                     );
                 }
