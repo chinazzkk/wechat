@@ -1,19 +1,21 @@
 {
-    "name": "sfsoft/wechat",
-    "description": "wechat helper",
-    "license": "MIT",
-    "type": "library",
-    "authors": [
-        {
-            "name": "ZEKI",
-            "email": "dlzk@qq.com"
-        }
-    ],
-    "require": {
-        "php": ">=5.3",
-        "illuminate/database": "^4.1"
-    },
-    "autoload": {
-        "psr-4": { "sfsoft\\wechat\\": "src/" }
+  "name": "sfsoft/wechat",
+  "description": "wechat helper",
+  "license": "MIT",
+  "type": "library",
+  "authors": [
+    {
+      "name": "ZEKI",
+      "email": "dlzk@qq.com"
     }
+  ],
+  "require": {
+    "php": ">=5.3",
+    "illuminate/database": ">=4.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "sfsoft\\wechat\\": "src/"
+    }
+  }
 }

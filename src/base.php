@@ -2,7 +2,6 @@
 
 namespace sfsoft\wechat;
 
-define('DB_NAME', 't_wechat_user');
 
 use Illuminate\Database\Capsule\Manager as DB;
 
@@ -15,7 +14,6 @@ class base
     private $appid = '';
     private $secret = '';
     private $code = '';
-    private $dataDir = '../data/';
 
     public function __construct($app_id, $secret)
     {

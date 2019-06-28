@@ -1,15 +1,13 @@
 <?php
 
 namespace sfsoft\wechat;
+
 use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Schema\Blueprint;
-define("ACCESS_TOKEN_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'access_token.php');
-define("JSAPI_TICKET_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'jsapi_ticket.php');
 
 
 class lib
 {
-
     public static function initDataBase($database)
     {
         try {
@@ -55,10 +53,13 @@ class lib
      *
      */
 
-    public static function getAccessToken($appid, $secret)
+    public static function getAccessToken($appid, $secret, $dir)
     {
+        if (!$dir) {
+            $dir = __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'access_token.php';
+        }
         $expireTime = 0;
-        $tokenFile = self::getJsonFile(ACCESS_TOKEN_DIR);
+        $tokenFile = self::getJsonFile($dir);
         if ($tokenFile) {
             $tokenFile = json_decode($tokenFile);
         } else {

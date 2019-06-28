@@ -2,15 +2,16 @@
 
 namespace sfsoft\wechat;
 
-define("ACCESS_TOKEN_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'access_token.php');
-define("JSAPI_TICKET_DIR", __DIR__ . DIRECTORY_SEPARATOR . "token" . DIRECTORY_SEPARATOR . 'jsapi_ticket.php');
 
 class jsapi
 {
     private $appid = '';
     private $secret = '';
+    private $token_path = '';
+    private $js_tick_path = '';
+    private $base_path = '';
 
-    public function __construct($app_id, $secret)
+    public function __construct($app_id, $secret, $token_dir_path = 'token')
     {
         if (($app_id && $secret) === true) {
             $this->appid = $app_id;
@@ -19,12 +20,27 @@ class jsapi
             echo 'sfs wechat notice:app_id and app_secret config error.';
             die();
         }
+
+        if ($token_dir_path === 'token') {
+            $this->base_path = dirname(__FILE__) . DIRECTORY_SEPARATOR . $token_dir_path;
+        }
+        if (!file_exists($this->base_path)) {
+            mkdir($this->base_path);
+        }
+        $this->token_path = $this->base_path .DIRECTORY_SEPARATOR. 'access_token.php';
+        if (!file_exists($this->token_path)) {
+            fopen($this->token_path, "w");
+        }
+        $this->js_tick_path = $this->base_path .DIRECTORY_SEPARATOR. 'jsapi_ticket.php';
+        if (!file_exists($this->js_tick_path)) {
+            fopen($this->js_tick_path, "w");
+        }
     }
 
     public function getToken()
     {
         $expireTime = 0;
-        $tokenFile = lib::getJsonFile(ACCESS_TOKEN_DIR);
+        $tokenFile = lib::getJsonFile($this->token_path);
         if ($tokenFile) {
             $tokenFile = json_decode($tokenFile);
         } else {
@@ -46,7 +62,7 @@ class jsapi
             $expireTime = time() + (int)$result['expires_in'];
             $token = $result['access_token'];
             $result['expire_time'] = $expireTime;
-            lib::setJsonFile(ACCESS_TOKEN_DIR, json_encode($result));
+            lib::setJsonFile($this->token_path, json_encode($result));
             return $token;
         }
         return false;
@@ -83,7 +99,7 @@ class jsapi
 
     private function getJsApiTicket()
     {
-        $tickFile = lib::getJsonFile(JSAPI_TICKET_DIR);
+        $tickFile = lib::getJsonFile($this->token_path);
 
         if ($tickFile)
             $data = json_decode($tickFile);
@@ -105,7 +121,7 @@ class jsapi
                 'jsapi_ticket' => $result['ticket'],
                 'expire_time' => time() + (int)$result['expires_in']
             );
-            lib::setJsonFile(JSAPI_TICKET_DIR, json_encode($res));
+            lib::setJsonFile($this->js_tick_path, json_encode($res));
             return $result['ticket'];
         } else {
             return false;
